@@ -15,6 +15,21 @@ jobs:
       matrix:
         python-version: ['3.10']
 
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 0000
+          POSTGRES_DB: starchat
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -25,6 +40,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Setup Database
+      run: |
+        python manage.py makemigrations
+        python manage.py migrate
     - name: Run Tests
+      env:
+        DATABASE_URL: postgres://postgres:0000@localhost:5432/starchat
       run: |
         python manage.py test
