@@ -16,10 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
+from starchat.views.current_user import CurrentUserView
 
 api_urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('accounts/', include('rest_registration.api.urls')),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('user/current/', CurrentUserView.as_view())
 ]
 
 urlpatterns = [
