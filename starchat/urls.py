@@ -19,6 +19,7 @@ from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from starchat.views.current_user import CurrentUserView
+from starchat.views.post import PostView
 
 api_urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
@@ -26,7 +27,9 @@ api_urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('user/current/', CurrentUserView.as_view())
+    path('user/current/', CurrentUserView.as_view()),
+    path('posts/', PostView.as_view({'get': 'list', 'post': 'create'})),
+    path('posts/<id>/', PostView.as_view({'put': 'update'}))
 ]
 
 urlpatterns = [
