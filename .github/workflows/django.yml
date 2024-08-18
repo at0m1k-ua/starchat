@@ -19,8 +19,8 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 0000
+          POSTGRES_USER: django
+          POSTGRES_PASSWORD: mypassword
           POSTGRES_DB: starchat
         ports:
           - 5432:5432
@@ -46,6 +46,6 @@ jobs:
         python manage.py migrate
     - name: Run Tests
       env:
-        DATABASE_URL: postgres://postgres:0000@localhost:5432/starchat
+        DATABASE_URL: postgres://django:mypassword@localhost:5432/starchat
       run: |
         python manage.py test
