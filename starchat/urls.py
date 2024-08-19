@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
-from starchat.views import CurrentUserView
+from starchat.views import CurrentUserView, CommentViewSet
 from starchat.views import PostViewSet
 
 api_urlpatterns = [
@@ -29,7 +29,8 @@ api_urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/current/', CurrentUserView.as_view()),
     path('post/', PostViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('post/<id>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}))
+    path('post/<id>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+    path('comment/', CommentViewSet.as_view({'post': 'create'})),
 ]
 
 urlpatterns = [
