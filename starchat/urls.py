@@ -29,7 +29,7 @@ api_urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/current/', CurrentUserView.as_view()),
     path('posts/', PostView.as_view({'get': 'list', 'post': 'create'})),
-    path('posts/<id>/', PostView.as_view({'put': 'update'}))
+    path('posts/<id>/', PostView.as_view({'get': 'retrieve', 'put': 'update'}))
 ]
 
 urlpatterns = [
