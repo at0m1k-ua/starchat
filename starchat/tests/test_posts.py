@@ -2,10 +2,29 @@ from starchat.tests.test_api import ApiTest
 
 
 class PostsTest(ApiTest):
+    __API_POST = f'{ApiTest._API_PREFIX}post/'
 
     def test_create_post_creates_post_with_right_sender_id(self):
         create_data = self.__create_post(self._gen_text())
         self.assertEqual(self._user.id, create_data['sender'])
+
+    def test_create_post_with_no_data_fails(self):
+        create_response = self.client.post(
+            f'{self.__API_POST}',
+            headers=self._jwt_auth()
+        )
+        self.assertEqual(400, create_response.status_code)
+
+    def test_create_post_with_empty_data_fails(self):
+        create_response = self.client.post(
+            f'{self.__API_POST}',
+            {},
+            headers=self._jwt_auth()
+        )
+        self.assertEqual(400, create_response.status_code)
+
+    def test_create_post_with_empty_text_fails(self):
+        self.__create_post('', 400)
 
     def test_read_all_posts_of_user_retrieves_all_their_posts(self):
         post1_text = self._gen_text()
@@ -41,9 +60,9 @@ class PostsTest(ApiTest):
         self.__delete_post(post_id)
         self.__read_post(post_id, expected_status_code=404)
 
-    def __create_post(self, text: str, expected_status_code: int = 200):
+    def __create_post(self, text: str | None, expected_status_code: int = 200):
         response = self.client.post(
-            f'{self._API_PREFIX}posts/',
+            f'{self.__API_POST}',
             {'text': text},
             headers=self._jwt_auth()
         )
@@ -52,7 +71,7 @@ class PostsTest(ApiTest):
 
     def __read_post(self, post_id: int, expected_status_code: int = 200):
         response = self.client.get(
-            f'{self._API_PREFIX}posts/{post_id}/',
+            f'{self.__API_POST}{post_id}/',
             headers=self._jwt_auth()
         )
         self.assertEqual(expected_status_code, response.status_code)
@@ -60,7 +79,7 @@ class PostsTest(ApiTest):
 
     def __read_posts_of_user(self, user_id: int, expected_status_code: int = 200):
         response = self.client.get(
-            f'{self._API_PREFIX}posts/?sender_id={user_id}',
+            f'{self.__API_POST}?sender_id={user_id}',
             headers=self._jwt_auth()
         )
         self.assertEqual(expected_status_code, response.status_code)
@@ -68,7 +87,7 @@ class PostsTest(ApiTest):
 
     def __update_post(self, post_id: int, text: str, expected_status_code: int = 200):
         response = self.client.put(
-            f'{self._API_PREFIX}posts/{post_id}/',
+            f'{self.__API_POST}{post_id}/',
             {'text': text},
             headers=self._jwt_auth()
         )
@@ -77,7 +96,7 @@ class PostsTest(ApiTest):
 
     def __delete_post(self, post_id: int, expected_status_code: int = 200):
         response = self.client.delete(
-            f'{self._API_PREFIX}posts/{post_id}/',
+            f'{self.__API_POST}{post_id}/',
             headers=self._jwt_auth()
         )
         self.assertEqual(expected_status_code, response.status_code)

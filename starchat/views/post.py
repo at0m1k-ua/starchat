@@ -2,52 +2,57 @@ from django.contrib.auth.models import User
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from starchat.models import Post
+from starchat.requests import *
 from starchat.serializers import PostSerializer
+from starchat.views.validated_mvs import ValidatedModelViewSet
 
 
-class PostView(ModelViewSet):
+class PostViewSet(ValidatedModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
 
     def create(self, *args, **kwargs):
-        data = self.request.data
-        text = data['text']
-        post = Post.objects.create(text=text, sender_id=self.request.user.id)
-        post.save()
-        serializer = PostSerializer(post)
+        body = self._pack_to_req_model(CreatePostRequestBody, self.request.data)
+
+        post_to_create = self.get_queryset().create(text=body.text, sender_id=self.request.user.id)
+        post_to_create.save()
+        serializer = self.get_serializer(post_to_create)
         return Response(status=200, data=serializer.data)
 
     def list(self, *args, **kwargs):
-        sender_id = self.request.GET.get('sender_id')
-        sender = get_object_or_404(User, id=sender_id)
+        params = self._pack_to_req_model(ListPostRequestParams, self.request.GET)
+
+        sender = get_object_or_404(User, id=params.sender_id)
         posts = sender.post_set.all()
-        serializer = PostSerializer(posts, many=True)
+        serializer = self.get_serializer(posts, many=True)
         return Response(status=200, data=serializer.data)
 
     def retrieve(self, *args, **kwargs):
-        post_id = self.kwargs['id']
-        post = get_object_or_404(Post, id=post_id)
-        serializer = PostSerializer(post)
+        url_params = self._pack_to_req_model(RetrievePostUrlParams, self.kwargs)
+
+        retrieved_post = get_object_or_404(self.get_queryset(), id=url_params.id)
+        serializer = self.get_serializer(retrieved_post)
         return Response(status=200, data=serializer.data)
 
     def update(self, *args, **kwargs):
-        post_id = self.kwargs['id']
-        post = get_object_or_404(Post, id=post_id)
-        if post.sender_id != self.request.user.id:
+        url_params = self._pack_to_req_model(UpdatePostRequestUrlParams, self.kwargs)
+        body = self._pack_to_req_model(UpdatePostRequestBody, self.request.data)
+
+        post_to_update = get_object_or_404(self.get_queryset(), id=url_params.id)
+        if post_to_update.sender_id != self.request.user.id:
             return Response(403)
 
-        data = self.request.data
-        post.text = data['text']
-        post.save()
-        serializer = PostSerializer(post)
+        post_to_update.text = body.text
+        post_to_update.save()
+        serializer = self.get_serializer(post_to_update)
         return Response(status=200, data=serializer.data)
 
     def destroy(self, *args, **kwargs):
-        post_id = self.kwargs['id']
-        post = get_object_or_404(Post, id=post_id)
-        post.delete()
+        url_params = self._pack_to_req_model(DestroyPostRequestUrlParams, self.kwargs)
+
+        post_to_delete = get_object_or_404(self.get_queryset(), id=url_params.id)
+        post_to_delete.delete()
         return Response(200)

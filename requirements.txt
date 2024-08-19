@@ -8,3 +8,4 @@ Markdown==3.7
 psycopg2==2.9.9
 PyJWT==2.9.0
 sqlparse==0.5.1
+pydantic~=2.8.2

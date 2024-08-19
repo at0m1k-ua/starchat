@@ -18,18 +18,18 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
-from starchat.views.current_user import CurrentUserView
-from starchat.views.post import PostView
+from starchat.views import CurrentUserView
+from starchat.views import PostViewSet
 
 api_urlpatterns = [
-    path('api-auth/', include('rest_framework.urls')),
+    # path('api-auth/', include('rest_framework.urls')),
     path('accounts/', include('rest_registration.api.urls')),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/current/', CurrentUserView.as_view()),
-    path('posts/', PostView.as_view({'get': 'list', 'post': 'create'})),
-    path('posts/<id>/', PostView.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}))
+    path('post/', PostViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('post/<id>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}))
 ]
 
 urlpatterns = [
