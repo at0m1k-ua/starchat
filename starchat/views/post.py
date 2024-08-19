@@ -45,3 +45,9 @@ class PostView(ModelViewSet):
         post.save()
         serializer = PostSerializer(post)
         return Response(status=200, data=serializer.data)
+
+    def destroy(self, *args, **kwargs):
+        post_id = self.kwargs['id']
+        post = get_object_or_404(Post, id=post_id)
+        post.delete()
+        return Response(200)
