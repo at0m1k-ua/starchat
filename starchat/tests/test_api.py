@@ -20,16 +20,13 @@ class ApiTest(APITestCase):
         ).data['id']
         self._user = User.objects.get(id=user_id)
 
-        self.__access_token = self.client.post(
+        self.access_token = self.client.post(
             f'{self._API_PREFIX}token/',
             {
                 'username': username,
                 'password': password
             }
         ).data['access']
-
-    def _jwt_auth(self):
-        return {'Authorization': f'Bearer {self.__access_token}'}
 
     @staticmethod
     def _gen_text(length: int = 128):
