@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
 
 
-class DestroyCommentRequestUrlParams(BaseModel):
+class DestroyItemRequestUrlParams(BaseModel):
     id: int = Field(ge=1)
