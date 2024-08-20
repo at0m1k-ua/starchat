@@ -17,7 +17,7 @@ class PostsTest(ApiTest):
     def test_create_post_with_no_data_fails(self):
         create_response = self.client.post(
             f'{self.__api.URL}',
-            headers=self.__api._jwt_auth()
+            headers=self.jwt_auth()
         )
         self.assertEqual(400, create_response.status_code)
 
@@ -25,7 +25,7 @@ class PostsTest(ApiTest):
         create_response = self.client.post(
             f'{self.__api.URL}',
             {},
-            headers=self.__api._jwt_auth()
+            headers=self.jwt_auth()
         )
         self.assertEqual(400, create_response.status_code)
 
