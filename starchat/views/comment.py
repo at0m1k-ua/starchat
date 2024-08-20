@@ -10,7 +10,6 @@ class CommentViewSet(BaseCrud):
     model = Comment
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
-    queryset = Comment.objects.all()
     create_request_body = CreateCommentRequestBody
     update_request_url_params = UpdateCommentRequestUrlParams
     update_request_body = UpdateCommentRequestBody
