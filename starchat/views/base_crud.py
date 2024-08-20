@@ -10,7 +10,6 @@ from starchat.requests import DestroyItemRequestUrlParams, RetrieveItemUrlParams
 
 
 class BaseCrud(ModelViewSet):
-    model = None
     create_request_body = None
     update_request_url_params = None
     update_request_body = None
@@ -18,14 +17,14 @@ class BaseCrud(ModelViewSet):
     list_related_object_type = None
     list_related_object_fk_name = None
 
-    def __init__(self, **kwargs):
-        self.queryset = self.model.objects.all()
-        super().__init__(**kwargs)
+    def create_middleware(self, item):
+        return item
 
     def create(self, *args, **kwargs):
         body = self._pack_to_req_model(self.create_request_body, self.request.data)
 
         item_to_create = self.get_queryset().create(**body.dict(), sender_id=self.request.user.id)
+        item_to_create = self.create_middleware(item_to_create)
         item_to_create.save()
         serializer = self.get_serializer(item_to_create)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
@@ -34,7 +33,7 @@ class BaseCrud(ModelViewSet):
         params = self._pack_to_req_model(self.list_request_params, self.request.GET)
 
         related_item = get_object_or_404(self.list_related_object_type, id=params.related_object_id)
-        listed_items = self.model.objects.filter(**{self.list_related_object_fk_name: related_item.id})
+        listed_items = self.get_queryset().filter(**{self.list_related_object_fk_name: related_item.id})
         serializer = self.get_serializer(listed_items, many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 

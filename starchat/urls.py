@@ -20,6 +20,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from starchat.views import CurrentUserView, CommentViewSet
 from starchat.views import PostViewSet
+from starchat.views.comment_analytics import CommentAnalyticsView
 
 api_urlpatterns = [
     # path('api-auth/', include('rest_framework.urls')),
@@ -32,6 +33,7 @@ api_urlpatterns = [
     path('post/<id>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
     path('comment/', CommentViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('comment/<id>/', CommentViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+    path('analytics/comments/', CommentAnalyticsView.as_view()),
 ]
 
 urlpatterns = [
