@@ -55,5 +55,8 @@ class PostViewSet(ValidatedModelViewSet):
         url_params = self._pack_to_req_model(DestroyPostRequestUrlParams, self.kwargs)
 
         post_to_delete = get_object_or_404(self.get_queryset(), id=url_params.id)
+        if post_to_delete.sender_id != self.request.user.id:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         post_to_delete.delete()
         return Response(status.HTTP_200_OK)

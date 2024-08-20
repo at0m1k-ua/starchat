@@ -30,7 +30,8 @@ api_urlpatterns = [
     path('user/current/', CurrentUserView.as_view()),
     path('post/', PostViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('post/<id>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
-    path('comment/', CommentViewSet.as_view({'post': 'create'})),
+    path('comment/', CommentViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('comment/<id>/', CommentViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
 ]
 
 urlpatterns = [

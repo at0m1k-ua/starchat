@@ -11,6 +11,9 @@ class PostsTest(ApiTest):
         create_data = self.__api.create(self._gen_text())
         self.assertEqual(self._user.id, create_data['sender'])
 
+        read_data = self.__api.read(create_data['id'])
+        self.assertEqual(self._user.id, read_data['sender'])
+
     def test_create_post_with_no_data_fails(self):
         create_response = self.client.post(
             f'{self.__api.URL}',
@@ -30,11 +33,8 @@ class PostsTest(ApiTest):
         self.__api.create('', 400)
 
     def test_read_all_posts_of_user_retrieves_all_their_posts(self):
-        post1_text = self._gen_text()
-        post1 = self.__api.create(post1_text)
-
-        post2_text = self._gen_text()
-        post2 = self.__api.create(post2_text)
+        post1 = self.__api.create(self._gen_text())
+        post2 = self.__api.create(self._gen_text())
 
         get_response = self.__api.read_posts_of_user(self._user.id)
         self.assertEqual([post2, post1], get_response)
