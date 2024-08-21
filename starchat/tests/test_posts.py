@@ -49,6 +49,7 @@ class PostsTest(ApiTest):
 
         list_posts = self.__api.read_posts_of_user(self._user.id)
         self.assertEqual([], list_posts)
+        SingletonMeta.unset_mock(CensorshipService)
 
     def test_read_all_posts_of_user_retrieves_all_their_posts(self):
         post1 = self.__api.create(self._gen_text())
