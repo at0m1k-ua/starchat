@@ -1,3 +1,7 @@
+from unittest.mock import MagicMock
+
+from starchat.services.censorship import CensorshipService
+from starchat.singleton import SingletonMeta
 from starchat.tests.api.post import PostTestApi
 from starchat.tests.test_api import ApiTest
 
@@ -31,6 +35,20 @@ class PostsTest(ApiTest):
 
     def test_create_post_with_empty_text_fails(self):
         self.__api.create('', 400)
+
+    def test_post_with_swear_word_is_auto_banned(self):
+        class CensorshipServiceMock:
+            is_harmful = MagicMock(return_value=True)
+        mock = CensorshipServiceMock()
+
+        SingletonMeta.set_mock(CensorshipService, mock)
+
+        created_post = self.__api.create(self._gen_text())
+        self.assertTrue(created_post['is_banned'])
+        mock.is_harmful.assert_called_with(created_post['text'])
+
+        list_posts = self.__api.read_posts_of_user(self._user.id)
+        self.assertEqual([], list_posts)
 
     def test_read_all_posts_of_user_retrieves_all_their_posts(self):
         post1 = self.__api.create(self._gen_text())
