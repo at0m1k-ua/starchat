@@ -18,6 +18,13 @@ class CommentsTest(ApiTest):
         read_comment = self.__comment_api.read(created_comment['id'])
         self.assertEqual(created_comment, read_comment)
 
+    def test_create_sub_comment(self):
+        comment_1 = self.__comment_api.create(self.__post['id'], self._gen_text())
+        comment_2 = self.__comment_api.create(self.__post['id'], self._gen_text(), parent_id=comment_1['id'])
+
+        self.assertIsNone(comment_1['parent'])
+        self.assertEqual(comment_1['id'], comment_2['parent'])
+
     def test_read_all_comments_of_post_retrieves_all_its_comments(self):
         comment_1 = self.__comment_api.create(self.__post['id'], self._gen_text())
         comment_2 = self.__comment_api.create(self.__post['id'], self._gen_text())
