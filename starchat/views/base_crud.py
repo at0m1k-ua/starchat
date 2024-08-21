@@ -30,8 +30,8 @@ class BaseCrudViewSet(ModelViewSet):
         body = self._pack_to_req_model(self.create_request_body, self.request.data)
 
         item_to_create = self.get_queryset().create(**body.dict(), sender_id=self.request.user.id)
-        item_to_create = self.create_middleware(item_to_create)
         item_to_create.save()
+        item_to_create = self.create_middleware(item_to_create)
         serializer = self.get_serializer(item_to_create)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 

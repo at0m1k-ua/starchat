@@ -22,5 +22,4 @@ class OpenaiApiService(metaclass=SingletonMeta):
             messages=request
         )
         response_content = response.choices[0].message.content
-        print(response_content)
         return response_content
