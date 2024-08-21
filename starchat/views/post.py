@@ -3,14 +3,12 @@ from rest_framework.permissions import IsAuthenticated
 
 from starchat.models import Post
 from starchat.requests import *
-from starchat.serializers import PostSerializer
 from starchat.services.censorship import CensorshipService
-from starchat.views.base_crud import BaseCrud
+from starchat.views.base_crud import BaseCrudViewSet
 
 
-class PostViewSet(BaseCrud):
+class PostViewSet(BaseCrudViewSet):
     queryset = Post.objects.filter(is_banned=False)
-    serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
     create_request_body = CreatePostRequestBody
     update_request_url_params = UpdatePostRequestUrlParams

@@ -5,7 +5,7 @@ from openai import OpenAI
 from starchat.singleton import SingletonMeta
 
 
-class OpenAiService(metaclass=SingletonMeta):
+class OpenaiApiService(metaclass=SingletonMeta):
     def __init__(self):
         self.is_available = os.environ.get('OPENAI_API_KEY') is not None
         if not self.is_available:

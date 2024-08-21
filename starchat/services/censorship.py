@@ -1,10 +1,10 @@
-from starchat.services.openai_service import OpenAiService
+from starchat.services.openai_api import OpenaiApiService
 from starchat.singleton import SingletonMeta
 
 
 class CensorshipService(metaclass=SingletonMeta):
     def __init__(self):
-        self.__openai_service = OpenAiService()
+        self.__openai_service = OpenaiApiService()
 
     def is_harmful(self, message: str):
         if not self.__openai_service.is_available:

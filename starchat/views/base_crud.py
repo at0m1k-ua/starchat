@@ -7,15 +7,21 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from starchat.requests import DestroyItemRequestUrlParams, RetrieveItemUrlParams
+from starchat.serializers.default_factory import DefaultSerializerFactory
 
 
-class BaseCrud(ModelViewSet):
+class BaseCrudViewSet(ModelViewSet):
     create_request_body = None
     update_request_url_params = None
     update_request_body = None
     list_request_params = None
     list_related_object_type = None
     list_related_object_fk_name = None
+
+    def __init__(self):
+        super().__init__()
+        if not self.serializer_class:
+            self.serializer_class = DefaultSerializerFactory.of(self.get_queryset().model)
 
     def create_middleware(self, item):
         return item

@@ -2,14 +2,12 @@ from rest_framework.permissions import IsAuthenticated
 
 from starchat.models import Comment, Post
 from starchat.requests import *
-from starchat.serializers import CommentSerializer
 from starchat.services.censorship import CensorshipService
-from starchat.views.base_crud import BaseCrud
+from starchat.views.base_crud import BaseCrudViewSet
 
 
-class CommentViewSet(BaseCrud):
+class CommentViewSet(BaseCrudViewSet):
     queryset = Comment.objects.filter(is_banned=False)
-    serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
     create_request_body = CreateCommentRequestBody
     update_request_url_params = UpdateCommentRequestUrlParams
