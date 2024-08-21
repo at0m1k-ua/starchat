@@ -11,3 +11,4 @@ sqlparse==0.5.1
 pydantic~=2.8.2
 openai~=1.41.1
 celery~=5.4.0
+gunicorn~=23.0.0

@@ -23,4 +23,5 @@ class CommentViewSet(BaseCrudViewSet):
         if not item.is_banned:
             AutoResponseService().register(item)
 
+        item.save()
         return item

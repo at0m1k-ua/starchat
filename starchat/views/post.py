@@ -20,4 +20,5 @@ class PostViewSet(BaseCrudViewSet):
     def create_middleware(self, item):
         censor = CensorshipService()
         item.is_banned = censor.is_harmful(item.text)
+        item.save()
         return item
