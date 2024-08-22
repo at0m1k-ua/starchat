@@ -42,7 +42,12 @@ All dependencies are included in `requirements.txt`. The project is based on Dja
 
 The project requires the following environment variable to be set:
 
+
 - `OPENAI_API_KEY`: API key for OpenAI services.
+
+```
+export OPENAI_API_KEY=<your_key>
+```
 
 ## Configuration
 

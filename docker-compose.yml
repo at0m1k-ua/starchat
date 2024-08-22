@@ -9,6 +9,8 @@ services:
     depends_on:
       - db
       - redis
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
 
   # Service for PostgreSQL
   db:
@@ -16,7 +18,7 @@ services:
     environment:
       POSTGRES_DB: starchat
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 0000
+      POSTGRES_PASSWORD: 'qwerty'
     ports:
       - "5432:5432"
     volumes:

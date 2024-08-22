@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'starchat',
         'USER': 'postgres',
-        'PASSWORD': '0000',
+        'PASSWORD': 'qwerty',
         'HOST': 'db',
         'PORT': '5432',
     }

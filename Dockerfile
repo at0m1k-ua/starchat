@@ -8,4 +8,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8080
 
-CMD celery -A starchat worker & gunicorn -c gunicorn.conf.py starchat.wsgi
+RUN chmod +x ./entrypoint.sh
+ENTRYPOINT ./entrypoint.sh
