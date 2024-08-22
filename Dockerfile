@@ -6,6 +6,6 @@ COPY . /app
 RUN apt-get update && apt-get install libpq-dev build-essential -y
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD celery -A starchat worker & gunicorn starchat.wsgi
+CMD celery -A starchat worker & gunicorn -c gunicorn.conf.py starchat.wsgi

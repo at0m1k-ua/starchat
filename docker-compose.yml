@@ -5,11 +5,10 @@ services:
   app:
     build: .
     ports:
-      - "8000:8000"
+      - "80:8080"
     depends_on:
       - db
       - redis
-    network_mode: "host"
 
   # Service for PostgreSQL
   db:
@@ -22,11 +21,9 @@ services:
       - "5432:5432"
     volumes:
       - ./postgres-data:/var/lib/postgresql
-    network_mode: "host"
 
   # Service for Redis
   redis:
     image: redis:7
     ports:
       - "6379:6379"
-    network_mode: "host"
