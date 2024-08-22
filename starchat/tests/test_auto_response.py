@@ -85,3 +85,7 @@ class AutoResponseTest(ApiTest):
         self.assertEqual(created_comment_response.data, comments_after_answer[0])
         self.assertEqual(reply_text, comments_after_answer[1]['text'])
         self.assertEqual(created_comment_response.data['id'], comments_after_answer[1]['parent'])
+
+        SingletonMeta.unset_mock(AutoResponseService)
+        SingletonMeta.unset_mock(OpenaiApiService)
+        SingletonMeta.unset_mock(CensorshipService)
