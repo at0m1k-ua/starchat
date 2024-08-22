@@ -10,6 +10,7 @@ services:
       - db
       - redis
     environment:
+      POSTGRESQL_HOSTNAME: db
       OPENAI_API_KEY: ${OPENAI_API_KEY}
 
   # Service for PostgreSQL

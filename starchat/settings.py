@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'starchat',
         'USER': 'postgres',
         'PASSWORD': 'qwerty',
-        'HOST': 'db',
+        'HOST': os.getenv("POSTGRESQL_HOSTNAME", "localhost"),
         'PORT': '5432',
     }
 }
